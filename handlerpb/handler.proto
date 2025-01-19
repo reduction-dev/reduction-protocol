@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package dev.reduction.handler;
+option go_package = "reduction.dev/reduction-handler/handlerpb";
+import "google/protobuf/timestamp.proto";
+
+service Handler {
+  rpc OnEvent(OnEventRequest) returns (HandlerResponse);
+  rpc OnTimerExpired(OnTimerExpiredRequest) returns (HandlerResponse);
+  rpc KeyEvent(KeyEventRequest) returns (KeyEventResponse);
+}
+
+message OnEventRequest {
+  KeyedEvent event = 1;
+  repeated StateEntryNamespace state_entry_namespaces = 2;
+}
+
+message OnTimerExpiredRequest {
+  bytes key = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  repeated StateEntryNamespace state_entry_namespaces = 3;
+}
+
+message HandlerResponse {
+  repeated google.protobuf.Timestamp new_timers = 1;
+  repeated StateMutationNamespace state_mutation_namespaces = 2;
+  repeated SinkRequest sink_requests = 3;
+}
+
+message StateEntryNamespace {
+  string namespace = 1;
+  repeated StateEntry entries = 2;
+}
+
+message StateEntry {
+  bytes key = 1;
+  bytes value = 2;
+}
+
+message StateMutationNamespace {
+  string namespace = 1;
+  repeated StateMutation mutations = 2;
+}
+
+message StateMutation {
+  oneof mutation {
+    DeleteMutation delete = 1;
+    PutMutation put = 2;
+  }
+}
+
+message DeleteMutation {
+  bytes key = 1;
+}
+
+message PutMutation {
+  bytes key = 1;
+  bytes value = 2;
+}
+
+message SinkRequest {
+  string id = 1;
+  bytes value = 2;
+}
+
+message KeyEventRequest {
+  bytes value = 1;
+}
+
+message KeyEventResponse {
+  repeated KeyedEvent events = 1;
+}
+
+message KeyedEvent {
+  bytes key = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  bytes value = 3;
+}
+
+message Empty{}
