@@ -33,19 +33,17 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// HandlerOnEventProcedure is the fully-qualified name of the Handler's OnEvent RPC.
-	HandlerOnEventProcedure = "/dev.reduction.handler.Handler/OnEvent"
-	// HandlerOnTimerExpiredProcedure is the fully-qualified name of the Handler's OnTimerExpired RPC.
-	HandlerOnTimerExpiredProcedure = "/dev.reduction.handler.Handler/OnTimerExpired"
-	// HandlerKeyEventProcedure is the fully-qualified name of the Handler's KeyEvent RPC.
-	HandlerKeyEventProcedure = "/dev.reduction.handler.Handler/KeyEvent"
+	// HandlerProcessEventBatchProcedure is the fully-qualified name of the Handler's ProcessEventBatch
+	// RPC.
+	HandlerProcessEventBatchProcedure = "/dev.reduction.handler.Handler/ProcessEventBatch"
+	// HandlerKeyEventBatchProcedure is the fully-qualified name of the Handler's KeyEventBatch RPC.
+	HandlerKeyEventBatchProcedure = "/dev.reduction.handler.Handler/KeyEventBatch"
 )
 
 // HandlerClient is a client for the dev.reduction.handler.Handler service.
 type HandlerClient interface {
-	OnEvent(context.Context, *connect.Request[handlerpb.OnEventRequest]) (*connect.Response[handlerpb.HandlerResponse], error)
-	OnTimerExpired(context.Context, *connect.Request[handlerpb.OnTimerExpiredRequest]) (*connect.Response[handlerpb.HandlerResponse], error)
-	KeyEvent(context.Context, *connect.Request[handlerpb.KeyEventRequest]) (*connect.Response[handlerpb.KeyEventResponse], error)
+	ProcessEventBatch(context.Context, *connect.Request[handlerpb.ProcessEventBatchRequest]) (*connect.Response[handlerpb.ProcessEventBatchResponse], error)
+	KeyEventBatch(context.Context, *connect.Request[handlerpb.KeyEventBatchRequest]) (*connect.Response[handlerpb.KeyEventBatchResponse], error)
 }
 
 // NewHandlerClient constructs a client for the dev.reduction.handler.Handler service. By default,
@@ -59,22 +57,16 @@ func NewHandlerClient(httpClient connect.HTTPClient, baseURL string, opts ...con
 	baseURL = strings.TrimRight(baseURL, "/")
 	handlerMethods := handlerpb.File_handlerpb_handler_proto.Services().ByName("Handler").Methods()
 	return &handlerClient{
-		onEvent: connect.NewClient[handlerpb.OnEventRequest, handlerpb.HandlerResponse](
+		processEventBatch: connect.NewClient[handlerpb.ProcessEventBatchRequest, handlerpb.ProcessEventBatchResponse](
 			httpClient,
-			baseURL+HandlerOnEventProcedure,
-			connect.WithSchema(handlerMethods.ByName("OnEvent")),
+			baseURL+HandlerProcessEventBatchProcedure,
+			connect.WithSchema(handlerMethods.ByName("ProcessEventBatch")),
 			connect.WithClientOptions(opts...),
 		),
-		onTimerExpired: connect.NewClient[handlerpb.OnTimerExpiredRequest, handlerpb.HandlerResponse](
+		keyEventBatch: connect.NewClient[handlerpb.KeyEventBatchRequest, handlerpb.KeyEventBatchResponse](
 			httpClient,
-			baseURL+HandlerOnTimerExpiredProcedure,
-			connect.WithSchema(handlerMethods.ByName("OnTimerExpired")),
-			connect.WithClientOptions(opts...),
-		),
-		keyEvent: connect.NewClient[handlerpb.KeyEventRequest, handlerpb.KeyEventResponse](
-			httpClient,
-			baseURL+HandlerKeyEventProcedure,
-			connect.WithSchema(handlerMethods.ByName("KeyEvent")),
+			baseURL+HandlerKeyEventBatchProcedure,
+			connect.WithSchema(handlerMethods.ByName("KeyEventBatch")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -82,31 +74,24 @@ func NewHandlerClient(httpClient connect.HTTPClient, baseURL string, opts ...con
 
 // handlerClient implements HandlerClient.
 type handlerClient struct {
-	onEvent        *connect.Client[handlerpb.OnEventRequest, handlerpb.HandlerResponse]
-	onTimerExpired *connect.Client[handlerpb.OnTimerExpiredRequest, handlerpb.HandlerResponse]
-	keyEvent       *connect.Client[handlerpb.KeyEventRequest, handlerpb.KeyEventResponse]
+	processEventBatch *connect.Client[handlerpb.ProcessEventBatchRequest, handlerpb.ProcessEventBatchResponse]
+	keyEventBatch     *connect.Client[handlerpb.KeyEventBatchRequest, handlerpb.KeyEventBatchResponse]
 }
 
-// OnEvent calls dev.reduction.handler.Handler.OnEvent.
-func (c *handlerClient) OnEvent(ctx context.Context, req *connect.Request[handlerpb.OnEventRequest]) (*connect.Response[handlerpb.HandlerResponse], error) {
-	return c.onEvent.CallUnary(ctx, req)
+// ProcessEventBatch calls dev.reduction.handler.Handler.ProcessEventBatch.
+func (c *handlerClient) ProcessEventBatch(ctx context.Context, req *connect.Request[handlerpb.ProcessEventBatchRequest]) (*connect.Response[handlerpb.ProcessEventBatchResponse], error) {
+	return c.processEventBatch.CallUnary(ctx, req)
 }
 
-// OnTimerExpired calls dev.reduction.handler.Handler.OnTimerExpired.
-func (c *handlerClient) OnTimerExpired(ctx context.Context, req *connect.Request[handlerpb.OnTimerExpiredRequest]) (*connect.Response[handlerpb.HandlerResponse], error) {
-	return c.onTimerExpired.CallUnary(ctx, req)
-}
-
-// KeyEvent calls dev.reduction.handler.Handler.KeyEvent.
-func (c *handlerClient) KeyEvent(ctx context.Context, req *connect.Request[handlerpb.KeyEventRequest]) (*connect.Response[handlerpb.KeyEventResponse], error) {
-	return c.keyEvent.CallUnary(ctx, req)
+// KeyEventBatch calls dev.reduction.handler.Handler.KeyEventBatch.
+func (c *handlerClient) KeyEventBatch(ctx context.Context, req *connect.Request[handlerpb.KeyEventBatchRequest]) (*connect.Response[handlerpb.KeyEventBatchResponse], error) {
+	return c.keyEventBatch.CallUnary(ctx, req)
 }
 
 // HandlerHandler is an implementation of the dev.reduction.handler.Handler service.
 type HandlerHandler interface {
-	OnEvent(context.Context, *connect.Request[handlerpb.OnEventRequest]) (*connect.Response[handlerpb.HandlerResponse], error)
-	OnTimerExpired(context.Context, *connect.Request[handlerpb.OnTimerExpiredRequest]) (*connect.Response[handlerpb.HandlerResponse], error)
-	KeyEvent(context.Context, *connect.Request[handlerpb.KeyEventRequest]) (*connect.Response[handlerpb.KeyEventResponse], error)
+	ProcessEventBatch(context.Context, *connect.Request[handlerpb.ProcessEventBatchRequest]) (*connect.Response[handlerpb.ProcessEventBatchResponse], error)
+	KeyEventBatch(context.Context, *connect.Request[handlerpb.KeyEventBatchRequest]) (*connect.Response[handlerpb.KeyEventBatchResponse], error)
 }
 
 // NewHandlerHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -116,32 +101,24 @@ type HandlerHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewHandlerHandler(svc HandlerHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	handlerMethods := handlerpb.File_handlerpb_handler_proto.Services().ByName("Handler").Methods()
-	handlerOnEventHandler := connect.NewUnaryHandler(
-		HandlerOnEventProcedure,
-		svc.OnEvent,
-		connect.WithSchema(handlerMethods.ByName("OnEvent")),
+	handlerProcessEventBatchHandler := connect.NewUnaryHandler(
+		HandlerProcessEventBatchProcedure,
+		svc.ProcessEventBatch,
+		connect.WithSchema(handlerMethods.ByName("ProcessEventBatch")),
 		connect.WithHandlerOptions(opts...),
 	)
-	handlerOnTimerExpiredHandler := connect.NewUnaryHandler(
-		HandlerOnTimerExpiredProcedure,
-		svc.OnTimerExpired,
-		connect.WithSchema(handlerMethods.ByName("OnTimerExpired")),
-		connect.WithHandlerOptions(opts...),
-	)
-	handlerKeyEventHandler := connect.NewUnaryHandler(
-		HandlerKeyEventProcedure,
-		svc.KeyEvent,
-		connect.WithSchema(handlerMethods.ByName("KeyEvent")),
+	handlerKeyEventBatchHandler := connect.NewUnaryHandler(
+		HandlerKeyEventBatchProcedure,
+		svc.KeyEventBatch,
+		connect.WithSchema(handlerMethods.ByName("KeyEventBatch")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/dev.reduction.handler.Handler/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case HandlerOnEventProcedure:
-			handlerOnEventHandler.ServeHTTP(w, r)
-		case HandlerOnTimerExpiredProcedure:
-			handlerOnTimerExpiredHandler.ServeHTTP(w, r)
-		case HandlerKeyEventProcedure:
-			handlerKeyEventHandler.ServeHTTP(w, r)
+		case HandlerProcessEventBatchProcedure:
+			handlerProcessEventBatchHandler.ServeHTTP(w, r)
+		case HandlerKeyEventBatchProcedure:
+			handlerKeyEventBatchHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -151,14 +128,10 @@ func NewHandlerHandler(svc HandlerHandler, opts ...connect.HandlerOption) (strin
 // UnimplementedHandlerHandler returns CodeUnimplemented from all methods.
 type UnimplementedHandlerHandler struct{}
 
-func (UnimplementedHandlerHandler) OnEvent(context.Context, *connect.Request[handlerpb.OnEventRequest]) (*connect.Response[handlerpb.HandlerResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("dev.reduction.handler.Handler.OnEvent is not implemented"))
+func (UnimplementedHandlerHandler) ProcessEventBatch(context.Context, *connect.Request[handlerpb.ProcessEventBatchRequest]) (*connect.Response[handlerpb.ProcessEventBatchResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("dev.reduction.handler.Handler.ProcessEventBatch is not implemented"))
 }
 
-func (UnimplementedHandlerHandler) OnTimerExpired(context.Context, *connect.Request[handlerpb.OnTimerExpiredRequest]) (*connect.Response[handlerpb.HandlerResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("dev.reduction.handler.Handler.OnTimerExpired is not implemented"))
-}
-
-func (UnimplementedHandlerHandler) KeyEvent(context.Context, *connect.Request[handlerpb.KeyEventRequest]) (*connect.Response[handlerpb.KeyEventResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("dev.reduction.handler.Handler.KeyEvent is not implemented"))
+func (UnimplementedHandlerHandler) KeyEventBatch(context.Context, *connect.Request[handlerpb.KeyEventBatchRequest]) (*connect.Response[handlerpb.KeyEventBatchResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("dev.reduction.handler.Handler.KeyEventBatch is not implemented"))
 }

@@ -5,36 +5,77 @@ option go_package = "reduction.dev/reduction-handler/handlerpb";
 import "google/protobuf/timestamp.proto";
 
 service Handler {
-  rpc OnEvent(OnEventRequest) returns (HandlerResponse);
-  rpc OnTimerExpired(OnTimerExpiredRequest) returns (HandlerResponse);
-  rpc KeyEvent(KeyEventRequest) returns (KeyEventResponse);
+  rpc ProcessEventBatch(ProcessEventBatchRequest) returns (ProcessEventBatchResponse);
+  rpc KeyEventBatch(KeyEventBatchRequest) returns (KeyEventBatchResponse);
 }
 
-message OnEventRequest {
-  KeyedEvent event = 1;
+// ProcessEventBatch messages
+
+message ProcessEventBatchRequest {
+  repeated Event events = 1;
+  repeated KeyState key_states = 2;
+}
+
+message KeyState {
+  bytes key = 1;
   repeated StateEntryNamespace state_entry_namespaces = 2;
 }
 
-message OnTimerExpiredRequest {
-  bytes key = 1;
-  google.protobuf.Timestamp timestamp = 2;
-  repeated StateEntryNamespace state_entry_namespaces = 3;
+message Event {
+  oneof event {
+    KeyedEvent keyed_event = 1;
+    TimerExpired timer_expired = 2;
+  }
 }
 
-message HandlerResponse {
-  repeated google.protobuf.Timestamp new_timers = 1;
-  repeated StateMutationNamespace state_mutation_namespaces = 2;
+message TimerExpired {
+  bytes key = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message ProcessEventBatchResponse {
+  repeated KeyResult key_results = 1;
   repeated SinkRequest sink_requests = 3;
 }
 
+// KeyEventBatch messages
+
+message KeyEventBatchRequest {
+  repeated bytes values = 1;
+}
+
+message KeyEventBatchResponse {
+  repeated KeyEventResult results = 1;
+}
+
+message KeyEventResult {
+  repeated KeyedEvent events = 1;
+}
+
+message KeyedEvent {
+  bytes key = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  bytes value = 3;
+}
+
+// State messages for requests
+
 message StateEntryNamespace {
-  string namespace = 1;
-  repeated StateEntry entries = 2;
+  string namespace = 2;
+  repeated StateEntry entries = 3;
 }
 
 message StateEntry {
   bytes key = 1;
   bytes value = 2;
+}
+
+// Shared result messages
+
+message KeyResult {
+  bytes key = 1;
+  repeated google.protobuf.Timestamp new_timers = 2;
+  repeated StateMutationNamespace state_mutation_namespaces = 3;
 }
 
 message StateMutationNamespace {
@@ -47,6 +88,11 @@ message StateMutation {
     DeleteMutation delete = 1;
     PutMutation put = 2;
   }
+}
+
+message Timer {
+  bytes key = 1;
+  google.protobuf.Timestamp timestamp = 2;
 }
 
 message DeleteMutation {
@@ -62,19 +108,3 @@ message SinkRequest {
   string id = 1;
   bytes value = 2;
 }
-
-message KeyEventRequest {
-  bytes value = 1;
-}
-
-message KeyEventResponse {
-  repeated KeyedEvent events = 1;
-}
-
-message KeyedEvent {
-  bytes key = 1;
-  google.protobuf.Timestamp timestamp = 2;
-  bytes value = 3;
-}
-
-message Empty{}
