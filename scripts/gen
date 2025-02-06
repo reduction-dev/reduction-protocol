@@ -8,4 +8,5 @@ set -ue
   --plugin=protoc-gen-connect-go=./bin/protoc-gen-connect-go \
   --connect-go_opt=paths=source_relative \
   --connect-go_out=. \
-  handlerpb/handler.proto
+  handlerpb/handler.proto \
+  kinesispb/kinesis.proto

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package dev.reduction.kinesis;
+option go_package = "reduction.dev/reduction-handler/kinesispb";
+import "google/protobuf/timestamp.proto";
+
+message Record {
+  google.protobuf.Timestamp timestamp = 1;
+  bytes data = 2;
+}
