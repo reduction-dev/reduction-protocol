@@ -14,6 +14,7 @@ service Handler {
 message ProcessEventBatchRequest {
   repeated Event events = 1;
   repeated KeyState key_states = 2;
+  google.protobuf.Timestamp watermark = 3;
 }
 
 message KeyState {
