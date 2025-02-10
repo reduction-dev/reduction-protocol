@@ -1,4 +1,4 @@
-module reduction.dev/reduction-handler
+module reduction.dev/reduction-protocol
 
 go 1.23
 

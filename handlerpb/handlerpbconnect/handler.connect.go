@@ -9,7 +9,7 @@ import (
 	context "context"
 	errors "errors"
 	http "net/http"
-	handlerpb "reduction.dev/reduction-handler/handlerpb"
+	handlerpb "reduction.dev/reduction-protocol/handlerpb"
 	strings "strings"
 )
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package dev.reduction.testrun;
 import "handlerpb/handler.proto"; 
-option go_package = "reduction.dev/reduction-handler/testrunpb";
+option go_package = "reduction.dev/reduction-protocol/testrunpb";
 
 message RunnerCommand {
   oneof command {

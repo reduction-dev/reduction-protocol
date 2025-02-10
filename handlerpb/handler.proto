@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package dev.reduction.handler;
-option go_package = "reduction.dev/reduction-handler/handlerpb";
+option go_package = "reduction.dev/reduction-protocol/handlerpb";
 import "google/protobuf/timestamp.proto";
 
 service Handler {
