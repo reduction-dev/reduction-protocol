@@ -9,4 +9,5 @@ set -ue
   --connect-go_opt=paths=source_relative \
   --connect-go_out=. \
   handlerpb/handler.proto \
-  kinesispb/kinesis.proto
+  kinesispb/kinesis.proto \
+  testrunpb/testrun.proto
