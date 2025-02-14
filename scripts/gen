@@ -10,4 +10,5 @@ set -ue
   --connect-go_out=. \
   handlerpb/handler.proto \
   kinesispb/kinesis.proto \
-  testrunpb/testrun.proto
+  testrunpb/testrun.proto \
+  jobconfigpb/jobconfig.proto

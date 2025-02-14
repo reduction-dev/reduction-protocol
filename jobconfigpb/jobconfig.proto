@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+// JobConfig is the configuration needed to run a job
+message JobConfig {
+  Job job = 1;
+  repeated Source sources = 2;
+  repeated Sink sinks = 3;
+}
+
+// Job contains job's parameters
+message Job {
+  int32 worker_count = 1;
+  int32 key_group_count = 2;
+  string working_storage_location = 3;
+  string savepoint_storage_location = 4;
+}
+
+// Source represents any type of input source
+message Source {
+  string id = 1;
+  oneof config {
+    StdioSource stdio = 2;
+    KinesisSource kinesis = 3;
+    HTTPAPISource http_api = 4;
+    EmbeddedSource embedded = 5;
+  }
+}
+
+// Sink represents any type of output sink
+message Sink {
+  string id = 1;
+  oneof config {
+    StdioSink stdio = 2;
+    HTTPAPISink http_api = 3;
+    MemorySink memory = 4;
+  }
+}
+
+// Source Configs
+message StdioSource {
+  Framing framing = 1;
+}
+
+// Framing specifies how to separate messages for the stdio source
+message Framing {
+  message LengthEncodedScheme {}
+
+  message DelimitedScheme {
+    bytes delimiter = 1;
+  }
+
+  oneof scheme {
+    LengthEncodedScheme length_encoded = 1;
+    DelimitedScheme delimited = 2;
+  }
+}
+
+message KinesisSource {
+  string stream_arn = 1;
+  string endpoint = 2;
+}
+
+message HTTPAPISource {
+  string addr = 1;
+  repeated string topics = 2;
+}
+
+message EmbeddedSource {
+  enum GeneratorType {
+    GENERATOR_TYPE_UNSPECIFIED = 0;
+    GENERATOR_TYPE_SEQUENCE = 1;
+  }
+
+  int32 split_count = 1;
+  int32 batch_size = 2;
+  GeneratorType generator = 3;
+}
+
+// Sink Configs
+message StdioSink {}
+
+message HTTPAPISink {
+  string addr = 1;
+}
+
+message MemorySink {}
