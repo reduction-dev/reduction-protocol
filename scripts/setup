@@ -9,9 +9,9 @@ TMP_DIR=$(mktemp -d)
 # Download and upzip file
 PROTOC_RELEASE=https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protoc-29.3-osx-aarch_64.zip
 curl --location $PROTOC_RELEASE --output ${TMP_DIR}/protoc.zip
-mkdir -p ./bin/protoc
-unzip -o ${TMP_DIR}/protoc.zip -d ./bin/protoc
-chmod u+x ./bin/protoc/bin/protoc
+mkdir -p ./vendor/protoc
+unzip -o ${TMP_DIR}/protoc.zip -d ./vendor/protoc
+chmod u+x ./vendor/protoc/bin/protoc
 
 # Remove temporary files
 rm -rf ${TMP_DIR}
@@ -24,7 +24,7 @@ TOOLS=(
   "google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.3"
 )
 for PKG in "${TOOLS[@]}"; do
-  GOBIN=$(pwd)/bin go install ${PKG}
+  GOBIN=$(pwd)/vendor go install ${PKG}
 done
 
 # Check if globstar is available in the current Bash version
