@@ -10,5 +10,4 @@ require (
 require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
 )
