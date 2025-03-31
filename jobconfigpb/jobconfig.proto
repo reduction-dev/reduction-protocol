@@ -3,6 +3,8 @@ syntax = "proto3";
 package dev.reduction.jobconfig;
 option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
 
+import "jobconfigpb/resolvable.proto";
+
 // JobConfig is the configuration needed to run a job
 message JobConfig {
   Job job = 1;
@@ -12,10 +14,10 @@ message JobConfig {
 
 // Job contains job's parameters
 message Job {
-  int32 worker_count = 1;
+  Int32Var worker_count = 1;
   int32 key_group_count = 2;
-  string working_storage_location = 3;
-  string savepoint_storage_location = 4;
+  StringVar working_storage_location = 3;
+  StringVar savepoint_storage_location = 4;
 }
 
 // Source represents any type of input source
@@ -59,12 +61,12 @@ message Framing {
 }
 
 message KinesisSource {
-  string stream_arn = 1;
-  string endpoint = 2;
+  StringVar stream_arn = 1;
+  StringVar endpoint = 2;
 }
 
 message HTTPAPISource {
-  string addr = 1;
+  StringVar addr = 1;
   repeated string topics = 2;
 }
 
@@ -83,7 +85,7 @@ message EmbeddedSource {
 message StdioSink {}
 
 message HTTPAPISink {
-  string addr = 1;
+  StringVar addr = 1;
 }
 
 message MemorySink {}

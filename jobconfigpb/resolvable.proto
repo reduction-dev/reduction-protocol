@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+message StringVar {
+    oneof kind {
+        string value = 1;
+        string param = 2;
+    }
+}
+
+message Int32Var {
+    oneof kind {
+        int32 value = 1;
+        string param = 2;
+    }
+}
