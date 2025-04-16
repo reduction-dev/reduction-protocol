@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+import "jobconfigpb/resolvable.proto";
+
+message HTTPAPISource {
+  StringVar addr = 1;
+  repeated string topics = 2;
+}
+
+message HTTPAPISink {
+  StringVar addr = 1;
+}

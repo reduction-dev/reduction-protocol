@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+message MemorySink {}

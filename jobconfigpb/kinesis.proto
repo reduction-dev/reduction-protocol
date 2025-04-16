@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+import "jobconfigpb/resolvable.proto";
+
+message KinesisSource {
+  StringVar stream_arn = 1;
+  StringVar endpoint = 2;
+}

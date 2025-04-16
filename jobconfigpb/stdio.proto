@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+message StdioSource {
+  Framing framing = 1;
+}
+
+// Framing specifies how to separate messages for the stdio source
+message Framing {
+  message LengthEncodedScheme {}
+
+  message DelimitedScheme {
+    bytes delimiter = 1;
+  }
+
+  oneof scheme {
+    LengthEncodedScheme length_encoded = 1;
+    DelimitedScheme delimited = 2;
+  }
+}
+
+message StdioSink {}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+message EmbeddedSource {
+  enum GeneratorType {
+    GENERATOR_TYPE_UNSPECIFIED = 0;
+    GENERATOR_TYPE_SEQUENCE = 1;
+  }
+
+  int32 split_count = 1;
+  int32 batch_size = 2;
+  GeneratorType generator = 3;
+}

@@ -4,6 +4,11 @@ package dev.reduction.jobconfig;
 option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
 
 import "jobconfigpb/resolvable.proto";
+import "jobconfigpb/stdio.proto";
+import "jobconfigpb/kinesis.proto";
+import "jobconfigpb/httpapi.proto";
+import "jobconfigpb/embedded.proto";
+import "jobconfigpb/memory.proto";
 
 // JobConfig is the configuration needed to run a job
 message JobConfig {
@@ -41,51 +46,7 @@ message Sink {
   }
 }
 
-// Source Configs
-message StdioSource {
-  Framing framing = 1;
-}
-
-// Framing specifies how to separate messages for the stdio source
-message Framing {
-  message LengthEncodedScheme {}
-
-  message DelimitedScheme {
-    bytes delimiter = 1;
-  }
-
-  oneof scheme {
-    LengthEncodedScheme length_encoded = 1;
-    DelimitedScheme delimited = 2;
-  }
-}
-
-message KinesisSource {
-  StringVar stream_arn = 1;
-  StringVar endpoint = 2;
-}
-
-message HTTPAPISource {
-  StringVar addr = 1;
-  repeated string topics = 2;
-}
-
-message EmbeddedSource {
-  enum GeneratorType {
-    GENERATOR_TYPE_UNSPECIFIED = 0;
-    GENERATOR_TYPE_SEQUENCE = 1;
-  }
-
-  int32 split_count = 1;
-  int32 batch_size = 2;
-  GeneratorType generator = 3;
-}
 
 // Sink Configs
-message StdioSink {}
 
-message HTTPAPISink {
-  StringVar addr = 1;
-}
 
-message MemorySink {}
