@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package dev.reduction.kafka;
+option go_package = "reduction.dev/reduction-protocol/kafkapb";
+import "google/protobuf/timestamp.proto";
+
+message Record {
+  string topic = 1;
+  int32 partition = 2;
+  bytes key = 3;
+  bytes value = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  repeated Header headers = 6;
+}
+
+message Header {
+  string key = 1;
+  bytes value = 2;
+}
