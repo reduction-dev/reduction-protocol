@@ -9,6 +9,7 @@ import "jobconfigpb/kinesis.proto";
 import "jobconfigpb/httpapi.proto";
 import "jobconfigpb/embedded.proto";
 import "jobconfigpb/memory.proto";
+import "jobconfigpb/kafka.proto";
 
 // JobConfig is the configuration needed to run a job
 message JobConfig {
@@ -33,6 +34,7 @@ message Source {
     KinesisSource kinesis = 3;
     HTTPAPISource http_api = 4;
     EmbeddedSource embedded = 5;
+    KafkaSource kafka = 6;
   }
 }
 
@@ -43,6 +45,7 @@ message Sink {
     StdioSink stdio = 2;
     HTTPAPISink http_api = 3;
     MemorySink memory = 4;
+    KafkaSink kafka = 5;
   }
 }
 

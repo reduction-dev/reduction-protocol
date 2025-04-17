@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package dev.reduction.jobconfig;
+option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
+
+import "jobconfigpb/resolvable.proto";
+
+message KafkaSource {
+  // The Kafkfa Consumer Group ID
+  StringVar consumer_group = 1;
+
+  // Brokers is a comma separated list of broker addresses
+  StringVar brokers = 2;
+
+  // Topics is a comma separated list of Kafka topic names
+  StringVar topics = 3;
+}
+
+message KafkaSink {
+  // Brokers is a comma separated list of broker addresses
+  StringVar brokers = 1;
+}
