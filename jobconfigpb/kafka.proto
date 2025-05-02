@@ -4,6 +4,7 @@ package dev.reduction.jobconfig;
 option go_package = "reduction.dev/reduction-protocol/jobconfigpb";
 
 import "jobconfigpb/resolvable.proto";
+import "google/protobuf/duration.proto";
 
 message KafkaSource {
   // The Kafkfa Consumer Group ID
@@ -14,6 +15,9 @@ message KafkaSource {
 
   // Topics is a comma separated list of Kafka topic names
   StringVar topics = 3;
+
+  // How often to check for new topic partitions
+  google.protobuf.Duration partition_discovery_interval = 4;
 }
 
 message KafkaSink {
